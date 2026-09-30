@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>Opening Obsidian…</title></head>
-<body>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>옵시디언으로 이동 중…</title>
+<style>body{font-family:-apple-system,sans-serif;display:flex;min-height:90vh;align-items:center;justify-content:center;text-align:center;color:#444}p{line-height:1.6}a{color:#7c6cf0}</style></head>
+<body><div>
 <script>
-// ?f=<base64url of vault-relative path>  →  obsidian://open?vault=SionVault&file=<path>
-// ?v=<vault name> (optional, default SionVault)
 (function () {
   var q = new URLSearchParams(location.search);
   var f = q.get("f");
-  if (!f) { document.body.textContent = "missing ?f="; return; }
+  var box = document.querySelector("div");
+  if (!f) { box.innerHTML = "<p>링크가 잘못됐어요.</p>"; return; }
   try {
     var rel = decodeURIComponent(escape(atob(f.replace(/-/g, "+").replace(/_/g, "/"))));
     var vault = q.get("v") || "SionVault";
     var url = "obsidian://open?vault=" + encodeURIComponent(vault) + "&file=" + encodeURIComponent(rel);
-    location.replace(url);
-    document.body.innerHTML = "<p>Opening in Obsidian…</p><p><a href='" + url + "'>탭해서 열기</a></p>";
-  } catch (e) { document.body.textContent = "bad link"; }
+    box.innerHTML = "<p>✅ 옵시디언으로 넘겼어요.<br>디스코드로 돌아가서 이 탭은 닫으면 돼요.</p>"
+                  + "<p style='font-size:0.85em'>안 열리면 <a href='" + url + "'>여기를 탭</a></p>";
+    setTimeout(function(){ location.href = url; }, 60);
+  } catch (e) { box.innerHTML = "<p>링크가 잘못됐어요.</p>"; }
 })();
 </script>
-</body></html>
+</div></body></html>
