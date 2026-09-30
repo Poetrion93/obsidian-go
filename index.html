@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Opening Obsidian…</title></head>
+<body>
+<script>
+// ?f=<base64url of vault-relative path>  →  obsidian://open?vault=SionVault&file=<path>
+// ?v=<vault name> (optional, default SionVault)
+(function () {
+  var q = new URLSearchParams(location.search);
+  var f = q.get("f");
+  if (!f) { document.body.textContent = "missing ?f="; return; }
+  try {
+    var rel = decodeURIComponent(escape(atob(f.replace(/-/g, "+").replace(/_/g, "/"))));
+    var vault = q.get("v") || "SionVault";
+    var url = "obsidian://open?vault=" + encodeURIComponent(vault) + "&file=" + encodeURIComponent(rel);
+    location.replace(url);
+    document.body.innerHTML = "<p>Opening in Obsidian…</p><p><a href='" + url + "'>탭해서 열기</a></p>";
+  } catch (e) { document.body.textContent = "bad link"; }
+})();
+</script>
+</body></html>
